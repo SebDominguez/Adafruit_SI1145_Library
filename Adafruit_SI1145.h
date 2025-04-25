@@ -19,13 +19,6 @@
 
 #include <stdint.h>
 
-typedef uint8_t u8;
-typedef uint16_t u16;
-typedef uint32_t u32;
-typedef int8_t s8;
-typedef int16_t s16;
-typedef int32_t s32;
-
 // fload FX20
 #define FLT_TO_FX20(x)       ((x*1048576)+.5)
 #define FX20_TO_FLT(x)       (x/1048576.)
@@ -193,12 +186,12 @@ typedef int32_t s32;
 // This structure is used to store the result of the calibration retrieval
 typedef struct
 {
-    u32     vispd_correction;
-    u32     irpd_correction;
-    u32     adcrange_ratio;
-    u32     irsize_ratio;
-    u32     ledi_ratio;
-    u8      *ucoef_p;
+    uint32_t     vispd_correction;
+    uint32_t     irpd_correction;
+    uint32_t     adcrange_ratio;
+    uint32_t     irsize_ratio;
+    uint32_t     ledi_ratio;
+    uint8_t      *ucoef_p;
 } SI114X_CAL_S;
 
 
@@ -255,7 +248,6 @@ private:
   void write8(uint8_t reg, uint8_t val);
   uint8_t readParam(uint8_t p);
   uint8_t writeParam(uint8_t p, uint8_t v);
-
   uint8_t _addr;
 };
 #endif

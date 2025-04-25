@@ -1,21 +1,20 @@
-/*************************************************** 
+/***************************************************
   This is a library for the Si1145 UV/IR/Visible Light Sensor
 
   Designed specifically to work with the Si1145 sensor in the
   adafruit shop
   ----> https://www.adafruit.com/products/1777
 
-  These sensors use I2C to communicate, 2 pins are required to  
+  These sensors use I2C to communicate, 2 pins are required to
   interface
-  Adafruit invests time and resources providing this open source code, 
-  please support Adafruit and open-source hardware by purchasing 
+  Adafruit invests time and resources providing this open source code,
+  please support Adafruit and open-source hardware by purchasing
   products from Adafruit!
 
-  Written by Limor Fried/Ladyada for Adafruit Industries.  
+  Written by Limor Fried/Ladyada for Adafruit Industries.
   BSD license, all text above must be included in any redistribution
  ****************************************************/
 
-#include "Adafruit_SI1145.h"
 #include "Adafruit_SI1145.h"
 
 // *******************************************************************
@@ -36,14 +35,14 @@
 // Structure Definition for calref array
 struct cal_ref_t
 {
-    u32 sirpd_adchi_irled;
-    u32 sirpd_adclo_irled;
-    u32 sirpd_adclo_whled;
-    u32 vispd_adchi_whled;
-    u32 vispd_adclo_whled;
-    u32 lirpd_adchi_irled;
-    u32 ledi_65ma;
-    u8  ucoef[4];
+    uint32_t sirpd_adchi_irled;
+    uint32_t sirpd_adclo_irled;
+    uint32_t sirpd_adclo_whled;
+    uint32_t vispd_adchi_whled;
+    uint32_t vispd_adclo_whled;
+    uint32_t lirpd_adchi_irled;
+    uint32_t ledi_65ma;
+    uint8_t  ucoef[4];
 };
 
 // Factory Calibration Reference Values
@@ -483,10 +482,10 @@ bool Adafruit_SI1145::si114x_set_ucoef(SI114X_CAL_S* si114x_cal) {
 boolean Adafruit_SI1145::begin(bool autoMeasurements) {
   _lastError = 0;
   Wire.begin();
- 
+
   uint8_t id = readPartId();
   if (id != 0x45 || _lastError) return false; // look for SI1145
-  
+
   reset();
   if (_lastError) return false;
 
@@ -515,8 +514,8 @@ boolean Adafruit_SI1145::begin(bool autoMeasurements) {
   SI1145_PARAM_CHLIST_ENPS1 | SI1145_PARAM_CHLIST_ENPS2 | SI1145_PARAM_CHLIST_ENPS3);
 
   // enable interrupt on every sample
-  write8(SI1145_REG_INTCFG, SI1145_REG_INTCFG_INTOE);  
-  write8(SI1145_REG_IRQEN, SI1145_REG_IRQEN_ALSEVERYSAMPLE);  
+  write8(SI1145_REG_INTCFG, SI1145_REG_INTCFG_INTOE);
+  write8(SI1145_REG_IRQEN, SI1145_REG_IRQEN_ALSEVERYSAMPLE);
 
   /****************************** Prox Sense 1 (PS1) */
   // program LED current
@@ -589,7 +588,7 @@ uint8_t Adafruit_SI1145::reset() {
   write8(SI1145_REG_COMMAND, SI1145_RESET);
   delay(10);
   write8(SI1145_REG_HWKEY, 0x17);
-  
+
   delay(10);
 
   return _lastError;
@@ -643,7 +642,7 @@ bool Adafruit_SI1145::readCalibrationParameters() {
 //      Serial1.printf("%2x ", buffer[i]);
 //    Serial1.print("\r\n");
 
-    s16  c_index = find_cal_index( buffer );
+    int16_t  c_index = find_cal_index( buffer );
      if ( c_index != 0 && c_index != 1 ) {
        break;
     }
@@ -838,7 +837,7 @@ uint8_t Adafruit_SI1145::takeForcedMeasurement() {
 uint8_t Adafruit_SI1145::writeParam(uint8_t p, uint8_t v) {
   //Serial.print("Param 0x"); Serial.print(p, HEX);
   //Serial.print(" = 0x"); Serial.println(v, HEX);
-  
+
   write8(SI1145_REG_PARAMWR, v);
   write8(SI1145_REG_COMMAND, p | SI1145_PARAM_SET);
   return read8(SI1145_REG_PARAMRD);
@@ -872,7 +871,7 @@ uint8_t  Adafruit_SI1145::read8(uint8_t reg) {
 uint16_t Adafruit_SI1145::read16(uint8_t a) {
   uint16_t ret;
 
-  Wire.beginTransmission(_addr); // start transmission to device 
+  Wire.beginTransmission(_addr); // start transmission to device
   Wire.write(a); // sends register address to read from
   uint8_t res = Wire.endTransmission(); // end transmission
   // check transmission error
@@ -917,7 +916,7 @@ uint8_t Adafruit_SI1145::readBytes(uint8_t a, uint8_t size, uint8_t buffer[]) {
 
 void Adafruit_SI1145::write8(uint8_t reg, uint8_t val) {
 
-  Wire.beginTransmission(_addr); // start transmission to device 
+  Wire.beginTransmission(_addr); // start transmission to device
   Wire.write(reg); // sends register address to write
   Wire.write(val); // sends value
   uint8_t res = Wire.endTransmission(); // end transmission
